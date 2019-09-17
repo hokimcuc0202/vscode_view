@@ -1,0 +1,2 @@
+# vscode_view
+vscodeExtension
