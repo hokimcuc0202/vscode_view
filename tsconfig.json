@@ -1,0 +1,56 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "es5",
+		"outDir": "out",
+		"lib": ["es5", "dom"],
+		"sourceMap": true,
+		"rootDir": "src",
+		"typeRoots": ["src/@types"],
+		"types" : ["react"],
+		"jsx": "react",
+		"strict": true   /* enable all strict type-checking options */
+		/* Additional Checks */
+		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
+		// "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
+		// "noUnusedParameters": true,  /* Report errors on unused parameters. */
+	},
+	"exclude": [
+		"node_modules",
+		".vscode-test"
+	],
+	"allowJs": true
+}
+
+// {
+// 	"compilerOptions": {
+// 	  "baseUrl": ".",
+// 	  "outDir": "esm",
+// 	  "module": "es6",
+// 	  "target": "es5",
+// 	  "lib": ["es6", "dom"],
+// 	  "sourceMap": false,
+// 	  "jsx": "react",
+// 	  "moduleResolution": "node",
+// 	  "rootDir": "src",
+// 	  "forceConsistentCasingInFileNames": true,
+// 	  "noImplicitReturns": true,
+// 	  "noImplicitThis": true,
+// 	  "noImplicitAny": true,
+// 	  "importHelpers": true,
+// 	  "strictNullChecks": true,
+// 	  "suppressImplicitAnyIndexErrors": true,
+// 	  "noUnusedLocals": true,
+// 	  "esModuleInterop": true,
+// 	  "declaration": true,
+// 	  "declarationDir": "esm"
+// 	},
+// 	"exclude": [
+// 	  "node_modules",
+// 	  "dist",
+// 	  "esm",
+// 	  "lib",
+// 	  "scripts",
+// 	  "webpack.config.js",
+// 	]
+//   }

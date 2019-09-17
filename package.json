@@ -1,0 +1,115 @@
+{
+    "name": "activitybar",
+    "displayName": "activityBar",
+    "description": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.36.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:extension.helloWorld",
+        "onView:kintoneProject"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "kintoneProject.addProject",
+                "title": "Add Project"
+            },
+            {
+                "command": "kintoneProject.addTemplate",
+                "title": "Add template",
+                "icon": {
+                    "light": "resources/light/plus.svg",
+                    "dark": "resources/dark/plus.svg"
+                }
+            },
+            {
+                "command": "kintoneProject.deployTemplate",
+                "title": "Deploy template",
+                "icon": {
+                    "light": "resources/light/deploy.svg",
+                    "dark": "resources/dark/deploy.svg"
+                }
+            }
+        ],
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "cli-kintone",
+                    "title": "kintone cli",
+                    "icon": "./resources/dep.svg"
+                }
+            ]
+        },
+        "views": {
+            "cli-kintone": [
+                {
+                    "id": "kintoneProject",
+                    "name": "kintone project"
+                }
+            ]
+        },
+        "menus": {
+            "view/title": [
+                {
+                    "command": "kintoneProject.addProject",
+                    "when": "view == kintoneProject"
+                }
+            ],
+            "view/item/context": [
+                {
+                    "command": "kintoneProject.addTemplate",
+                    "when": "view == kintoneProject && viewItem == project",
+                    "group": "inline"
+                },
+                {
+                    "command": "kintoneProject.deployTemplate",
+                    "when": "view == kintoneProject && viewItem == template",
+                    "group": "inline"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile",
+        "test": "node ./out/test/runTest.js",
+        "build": "webpack --mode production --watch"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.5.5",
+        "@babel/preset-env": "^7.5.5",
+        "@babel/preset-typescript": "^7.3.3",
+        "@babel/runtime-corejs3": "^7.5.5",
+        "@types/glob": "^7.1.1",
+        "@types/mocha": "^5.2.6",
+        "@types/node": "^10.12.21",
+        "@types/react": "^16.9.2",
+        "@types/vscode": "^1.36.0",
+        "core-js": "^3.2.1",
+        "css-loader": "^3.2.0",
+        "glob": "^7.1.4",
+        "mocha": "^6.1.4",
+        "style-loader": "^1.0.0",
+        "tslint": "^5.12.1",
+        "typescript": "^3.3.1",
+        "vscode-test": "^1.0.2",
+        "@kintone/customize-uploader": "^1.5.3"
+    },
+    "dependencies": {
+        "@babel/plugin-proposal-class-properties": "^7.5.5",
+        "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+        "@kintone/kintone-ui-component": "^0.3.6",
+        "babel-loader": "^8.0.6",
+        "child_process": "^1.0.2",
+        "webpack": "^4.39.3",
+        "webpack-cli": "^3.3.7"
+    }
+}
