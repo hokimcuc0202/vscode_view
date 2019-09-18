@@ -3,6 +3,8 @@ import {TextInput} from './component/TextInput'
 import Button from '@kintone/kintone-ui-component/esm/js/Button'
 import * as vscode from 'vscode'
 
+declare var acquireVsCodeApi: Function
+
 class RenderTemplate {
     private appNameEl: TextInput
     private typeEl: SelectInput
@@ -18,6 +20,7 @@ class RenderTemplate {
     eslintEl: SelectInput
     scopeEl: SelectInput
     submitBtn: Button
+    vscode: any;
 
     constructor() {
         this.appNameEl = new TextInput({title: 'App Name'})
@@ -34,7 +37,9 @@ class RenderTemplate {
         this.eslintEl = new SelectInput({title: 'Use @cybozu/eslint-config', items:[{value: 'yes', label: 'Yes'},{value: 'no', label: 'No'}]})
         this.scopeEl = new SelectInput({title: 'Customization scope', items:[{value: 'All', label: 'All'},{value: 'ADMIN', label: 'ADMIN'},{value: 'NONE', label: 'NONE'}]})
         this.submitBtn = new Button({text: 'Add Template', type: 'submit'})
+        
 
+        this.vscode = acquireVsCodeApi();
         this.handleSubmitBtn()
     }
 
@@ -59,12 +64,18 @@ class RenderTemplate {
 
     handleSubmitBtn() {
         this.submitBtn.on('click', () => {
-            let textCommand = `kintone-cli create-template --quick --app-name ${this.appNameEl.getValue()} `
+            let textCommand = `kintone-cli create-template --app-name ${this.appNameEl.getValue()} `
             textCommand += `--type ${this.typeEl.getValue()} `
             textCommand += `--set-auth --domain ${this.domainEl.getValue()} --username ${this.userNameEl.getValue()} --password ${this.passwordEl.getValue()} `
 
             if (this.proxyEl.getValue() !== '') {
                 textCommand += `--proxy ${this.proxyEl.getValue()} `
+            } else {
+                textCommand += `--no-proxy `
+            }
+
+            if (this.typeEl.getValue() === 'Customization') {
+                textCommand += `--app-id ${this.appIdEl.getValue()} `
             }
 
             if (this.reactEl.getValue() === 'yes') {
@@ -75,11 +86,18 @@ class RenderTemplate {
                 textCommand += `--use-typescript `
             }
 
-            // const vscode = acquireVsCodeApi();
-            // vscode.postMessage({
-            //     command: 'createTemplate',
-            //     text: textCommand,
-            // });
+            if (this.webpackEl.getValue() === 'yes') {
+                textCommand += `--use-webpack --entry ${this.entryWebpackEl.getValue()} `
+            }
+
+            if (this.eslintEl.getValue() === 'yes') {
+                textCommand += `--use-cybozu-lint `
+            }
+
+            this.vscode.postMessage({
+                command: 'createTemplate',
+                text: textCommand,
+            });
         })
     }
 

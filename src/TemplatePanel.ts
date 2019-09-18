@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
+import {ProjectView} from './cliProjectView';
 
 export class TemplatePanel {
     public static currentPanel: TemplatePanel | undefined;
@@ -7,7 +8,7 @@ export class TemplatePanel {
     private readonly _extensionPath: string;
     private readonly _userPath: string;
 
-    public static createOrShow(extensionPath: string, userPath: string) {
+    public static createOrShow(extensionPath: string, userPath: string, view: ProjectView) {
         
     const panel = vscode.window.createWebviewPanel(
         'template',
@@ -22,31 +23,18 @@ export class TemplatePanel {
         }
     )
     
-    TemplatePanel.currentPanel = new TemplatePanel(panel, extensionPath, userPath)
+    TemplatePanel.currentPanel = new TemplatePanel(panel, extensionPath, userPath, view)
     }
 
-    public static revive(panel: vscode.WebviewPanel, extensionPath: string, userPath: string) {
-		TemplatePanel.currentPanel = new TemplatePanel(panel, extensionPath, userPath)
-	}
-
-    private constructor(panel: vscode.WebviewPanel, extensionPath: string, userPath: string) {
+    private constructor(panel: vscode.WebviewPanel, extensionPath: string, userPath: string, view: ProjectView) {
 		this._panel = panel;
         this._extensionPath = extensionPath;
         this._userPath = userPath
 
 		// Set the webview's initial html content
         this._panel.webview.html = this._getHtmlForWebview();
-        
-        this._panel.onDidChangeViewState(
-			e => {
-				if (this._panel.visible) {
-                    // this._update();
-				}
-			},
-			null,
-			// this._disposables
-		);
 
+        let self = this
 		// Handle messages from the webview
 		this._panel.webview.onDidReceiveMessage(
 			message => {
@@ -57,12 +45,19 @@ export class TemplatePanel {
                         	cwd: userPath
                         });
                         terminal.sendText(message.text);
+		                terminal.sendText('exit', false);
                         terminal.show();
+                        // a.substr(0).match(/kintone-cli\s(auth|dev)\s--app-name/)
+                        (<any>terminal).onDidWriteData((data: String) => {
+                            if (data.substr(0).match(/kintone-cli\s(auth|dev)\s--app-name/)) {
+                                console.log("Terminal data: ", data);
+                                view.refresh()
+                            }
+                        });
 						return;
 				}
 			},
-			null,
-			// this._disposables
+			null
 		);
     }
     
@@ -86,7 +81,6 @@ export class TemplatePanel {
                 </head>
                 <body>
                     <div id="container"></div>
-                    <h3 id="lines-of-code-counter">0</h3>
                     <script nonce="${nonce}" src="${scriptUri}"></script>
                 </body>
             </html>`;

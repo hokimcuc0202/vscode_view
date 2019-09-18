@@ -14,7 +14,7 @@ export class TextInput {
     }
 
     constructor(params: TextInputProp) {
-        this.el = new Text({})
+        this.el = new Text({value: this._props.value})
         if (params) {
             this._props = {...this._props, ...params};
         }
